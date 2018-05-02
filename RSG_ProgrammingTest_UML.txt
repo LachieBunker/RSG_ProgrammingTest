@@ -1,7 +1,7 @@
 >GameManager
 starts, runs, and ends game
 updates UI
-bool gamePaused;
+GameState gameState;
 int playerScore
 GameObject ballPrefab
 Vector3 ballSpawnPos
@@ -26,6 +26,7 @@ controls balls movement and collision
 Vector3 direction
 float speed
 Update()
+SetProperties(Vector3 dir, float _speed)
 HitObject(GameObject whatIHit)
 OnCollisionEnter(collision whatIHit)
 
@@ -33,9 +34,12 @@ OnCollisionEnter(collision whatIHit)
 Manages brick interactions
 Colour colour
 int score
+Start()
 BrickHit()
 
 >PaddleController
 Moves paddle
 float speed
 Update()
+
+>GameState

@@ -6,13 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
-    public bool gamePaused;
+    public GameState gameState;
     private int playerScore;
     public GameObject ballPrefab;
     public Vector3 ballSpawnPos;
     private GameObject ballObject;
     public GameObject pauseCanvas;
     public GameObject gameOverCanvas;
+    public Text gameOverMessage;
     public Text scoreText;
 
 	// Use this for initialization
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour {
         ballObject = (GameObject)Instantiate(ballPrefab, ballSpawnPos, Quaternion.identity);
         pauseCanvas.gameObject.SetActive(false);
         gameOverCanvas.gameObject.SetActive(false);
+        StartGame();
 	}
 	
 	// Update is called once per frame
@@ -37,15 +39,15 @@ public class GameManager : MonoBehaviour {
     private void StartGame()
     {
         Time.timeScale = 1.0f;
-        //Set ball velocity
+        ballObject.GetComponent<BallController>().SetProperties(new Vector3(-0.5f, 0.5f, 0), 0.25f);
     }
 
     private void UpdateUI()
     {
-        scoreText.text = playerScore.ToString();
+        scoreText.text = "Score: " + playerScore.ToString();
     }
 
-    private void UpdateScore(int scoreToAdd)
+    public void UpdateScore(int scoreToAdd)
     {
         playerScore += scoreToAdd;
         UpdateUI();
@@ -63,13 +65,18 @@ public class GameManager : MonoBehaviour {
 
     public void GameOver(string gOCondition)
     {
+        Time.timeScale = 0.0f;
         switch(gOCondition)
         {
             case "Won":
-
+                gameState = GameState.Won;
+                gameOverCanvas.SetActive(true);
+                gameOverMessage.text = "You Won!";
                 break;
             case "Lost":
-
+                gameState = GameState.Lost;
+                gameOverCanvas.SetActive(true);
+                gameOverMessage.text = "You Lost!";
                 break;
             default:
                 Debug.Log("Error, incorrect input");
@@ -79,15 +86,17 @@ public class GameManager : MonoBehaviour {
 
     public void TogglePauseGame()
     {
-        if(gamePaused)
+        if(gameState == GameState.Paused)
         {
-            gamePaused = false;
+            gameState = GameState.Playing;
             Time.timeScale = 1.0f;
+            pauseCanvas.gameObject.SetActive(false);
         }
         else
         {
-            gamePaused = true;
+            gameState = GameState.Paused;
             Time.timeScale = 0.0f;
+            pauseCanvas.gameObject.SetActive(true);
         }
     }
 
@@ -101,3 +110,5 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(0);
     }
 }
+
+public enum GameState { Playing, Paused, Lost, Won}
