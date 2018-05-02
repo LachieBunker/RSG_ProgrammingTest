@@ -19,7 +19,7 @@ BallLost()
 GameOver(string gOCondition)
 TogglePauseGame()
 Restart()
-Menu()
+Quit()
 
 >BallController
 controls balls movement and collision

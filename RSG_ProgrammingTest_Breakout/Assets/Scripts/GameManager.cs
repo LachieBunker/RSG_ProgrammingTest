@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
+    //Variables
     public GameState gameState;
     private int playerScore;
     public GameObject ballPrefab;
@@ -19,7 +20,9 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
+        //Setup game
         Time.timeScale = 0.0f;
+        gameState = GameState.Paused;
         playerScore = 0;
         ballObject = (GameObject)Instantiate(ballPrefab, ballSpawnPos, Quaternion.identity);
         pauseCanvas.gameObject.SetActive(false);
@@ -36,33 +39,39 @@ public class GameManager : MonoBehaviour {
         }
 	}
 
+    //Unpause the game and start
     private void StartGame()
     {
+        gameState = GameState.Playing;
         Time.timeScale = 1.0f;
         ballObject.GetComponent<BallController>().SetProperties(new Vector3(-0.5f, 0.5f, 0), 0.25f);
     }
 
+    //Update score and player lives on hud
     private void UpdateUI()
     {
         scoreText.text = "Score: " + playerScore.ToString();
     }
 
+    //Increase playerScore
     public void UpdateScore(int scoreToAdd)
     {
         playerScore += scoreToAdd;
         UpdateUI();
     }
-
+    
     public void BallHitTopWall()
     {
         GameOver("Won");
     }
 
+    //Ball hit bottom wall
     public void BallLost()
     {
         GameOver("Lost");
     }
 
+    //Game has ended, and player has either won or lost
     public void GameOver(string gOCondition)
     {
         Time.timeScale = 0.0f;
@@ -92,11 +101,15 @@ public class GameManager : MonoBehaviour {
             Time.timeScale = 1.0f;
             pauseCanvas.gameObject.SetActive(false);
         }
-        else
+        else if(gameState == GameState.Playing)
         {
             gameState = GameState.Paused;
             Time.timeScale = 0.0f;
             pauseCanvas.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("Game over");
         }
     }
 
@@ -105,9 +118,9 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void Menu()
+    public void Quit()
     {
-        SceneManager.LoadScene(0);
+        Application.Quit();
     }
 }
 

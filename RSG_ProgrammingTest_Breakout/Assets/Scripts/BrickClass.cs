@@ -12,6 +12,7 @@ public class BrickClass : MonoBehaviour {
         gameObject.GetComponent<MeshRenderer>().material.color = colour;
     }
 
+    //Brick was hit by ball
     public void BrickHit()
     {
         GameObject.FindWithTag("GameController").GetComponent<GameManager>().UpdateScore(score);

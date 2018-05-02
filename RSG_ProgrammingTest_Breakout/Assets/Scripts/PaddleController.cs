@@ -13,7 +13,9 @@ public class PaddleController : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update ()
+    {
+        //lerp paddle along horizontal axis towards mouse
         if(Input.mousePosition.x > 0.0f && Input.mousePosition.x < Screen.width && gameManager.gameState == GameState.Playing)
         {
             transform.position = new Vector3(Mathf.Lerp(transform.position.x, Camera.main.ScreenToWorldPoint(Input.mousePosition).x, speed), transform.position.y, transform.position.z);

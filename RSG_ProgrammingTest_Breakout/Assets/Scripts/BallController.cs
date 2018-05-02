@@ -16,7 +16,8 @@ public class BallController : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         if(gameManager.gameState == GameState.Playing)
         {
             transform.Translate(direction * speed);
@@ -29,6 +30,7 @@ public class BallController : MonoBehaviour {
         speed = _speed;
     }
 
+    //Bounce when the ball hits an object
     private void HitObject(Vector3 whatIHit)
     {
         direction = Vector3.Reflect(direction, whatIHit);
