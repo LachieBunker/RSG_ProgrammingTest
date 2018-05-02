@@ -3,12 +3,15 @@ starts, runs, and ends game
 updates UI
 GameState gameState;
 int playerScore
+int currentLives;
+int maxLives;
 GameObject ballPrefab
 Vector3 ballSpawnPos
 GameObject ballObject
 GameObject pauseCanvas
 GameObject gameOverCanvas
 Text scoreText
+Text livesText
 Start()
 Update()
 StartGame()
@@ -27,7 +30,8 @@ Vector3 direction
 float speed
 Update()
 SetProperties(Vector3 dir, float _speed)
-HitObject(GameObject whatIHit)
+HitObject(Vector3 whatIHit)
+HitPaddle(Vector3 hitPos, GameObject paddle)
 OnCollisionEnter(collision whatIHit)
 
 >BrickClass

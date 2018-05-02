@@ -36,13 +36,54 @@ public class BallController : MonoBehaviour {
         direction = Vector3.Reflect(direction, whatIHit);
     }
 
+    private void HitPaddle(Vector3 hitPos, GameObject paddle)
+    {
+        float dist = Vector3.Distance(transform.position, paddle.transform.position);
+        Vector3 dir = Vector3.Reflect(direction, hitPos);
+        Debug.Log(dir);
+        if(dist > 1.75f)
+        {
+            if(dir.x < 0)
+            {
+                direction = new Vector3(-0.75f, 0.25f, 0);
+            }
+            else
+            {
+                direction = new Vector3(0.75f, 0.25f, 0);
+            }
+            
+        }
+        else if(dist < 1.15f)
+        {
+            if (dir.x < 0)
+            {
+                direction = new Vector3(-0.25f, 0.75f, 0);
+            }
+            else
+            {
+                direction = new Vector3(0.25f, 0.75f, 0);
+            }
+        }
+        else
+        {
+            if (dir.x < 0)
+            {
+                direction = new Vector3(-0.5f, 0.5f, 0);
+            }
+            else
+            {
+                direction = new Vector3(0.5f, 0.5f, 0);
+            }
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         string objectTag = collision.gameObject.tag;
         switch(objectTag)
         {
             case "Paddle":
-                HitObject(collision.contacts[0].normal);
+                HitPaddle(collision.contacts[0].normal, collision.gameObject);
                 break;
             case "Brick":
                 collision.gameObject.GetComponent<BrickClass>().BrickHit();
@@ -53,6 +94,7 @@ public class BallController : MonoBehaviour {
                 break;
             case "BottomWall":
                 gameManager.BallLost();
+                Destroy(gameObject);
                 break;
             default:
                 HitObject(collision.contacts[0].normal);
