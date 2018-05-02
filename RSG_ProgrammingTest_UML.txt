@@ -1,0 +1,38 @@
+>GameManager
+starts, runs, and ends game
+updates UI
+int playerScore
+GameObject ballPrefab
+GameObject ballObject
+GameObject pauseCanvas
+Text scoreText
+Start()
+Update()
+StartGame()
+UpdateUI()
+UpdateScore(int scoreToAdd)
+HitTopWall()
+BallLost()
+GameOver(string gOCondition)
+TogglePauseGame()
+Restart()
+Menu()
+
+>BallController
+controls balls movement and collision
+Vector3 direction
+float speed
+Update()
+HitObject(GameObject whatIHit)
+OnCollisionEnter(collision whatIHit)
+
+>BrickClass
+Manages brick interactions
+Colour colour
+int score
+BrickHit()
+
+>PaddleController
+Moves paddle
+float speed
+Update()
