@@ -1,10 +1,13 @@
 >GameManager
 starts, runs, and ends game
 updates UI
+bool gamePaused;
 int playerScore
 GameObject ballPrefab
+Vector3 ballSpawnPos
 GameObject ballObject
 GameObject pauseCanvas
+GameObject gameOverCanvas
 Text scoreText
 Start()
 Update()
