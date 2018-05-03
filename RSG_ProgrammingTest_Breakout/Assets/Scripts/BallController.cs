@@ -90,7 +90,14 @@ public class BallController : MonoBehaviour {
                 HitObject(collision.contacts[0].normal);
                 break;
             case "TopWall":
-                gameManager.BallHitTopWall();
+                if(gameManager.gameMode == "Reach")
+                {
+                    gameManager.BallHitTopWall();
+                }
+                else
+                {
+                    HitObject(collision.contacts[0].normal);
+                }
                 break;
             case "BottomWall":
                 gameManager.BallLost();

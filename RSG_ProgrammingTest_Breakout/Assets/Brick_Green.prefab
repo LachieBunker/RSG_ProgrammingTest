@@ -109,3 +109,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colour: {r: 0, g: 1, b: 0.17241383, a: 0}
   score: 3
+  uiNotification: {fileID: 1151388066533676, guid: 405f6aa9c03a7134681d2e3fdef8cfb0,
+    type: 2}

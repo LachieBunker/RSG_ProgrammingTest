@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
 
     //Variables
     public GameState gameState;
+    public string gameMode;
     private int playerScore;
     private int currentLives;
     private int maxLives = 3;
@@ -17,6 +18,7 @@ public class GameManager : MonoBehaviour {
     public GameObject ballPrefab;
     public Vector3 ballSpawnPos;
     private GameObject ballObject;
+    public GameObject gameModeCanvas;
     public GameObject pauseCanvas;
     public GameObject gameOverCanvas;
     public Text gameOverMessage;
@@ -35,8 +37,8 @@ public class GameManager : MonoBehaviour {
         ballObject = (GameObject)Instantiate(ballPrefab, ballSpawnPos, Quaternion.identity);
         pauseCanvas.gameObject.SetActive(false);
         gameOverCanvas.gameObject.SetActive(false);
+        gameModeCanvas.gameObject.SetActive(true);
         UpdateUI();
-        StartGame();
 	}
 	
 	// Update is called once per frame
@@ -48,6 +50,7 @@ public class GameManager : MonoBehaviour {
         }
 	}
 
+    //Generate bricks, with the colour of the bricks based on brickRowPrefabs
     private void GenerateBricks()
     {
         for(int x = 0; x < brickWidth; x++)
@@ -57,6 +60,21 @@ public class GameManager : MonoBehaviour {
                 Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
             }
         }
+    }
+
+    //Set the game mode, either Reach the top, or Clear the screen
+    public void SetGameMode(string _gameMode)
+    {
+        if(_gameMode == "Clear")
+        {
+            gameMode = "Clear";
+        }
+        else
+        {
+            gameMode = "Reach";
+        }
+        gameModeCanvas.gameObject.SetActive(false);
+        StartGame();
     }
 
     //Unpause the game and start
@@ -83,7 +101,23 @@ public class GameManager : MonoBehaviour {
     
     public void BallHitTopWall()
     {
-        GameOver("Won");
+        if (gameMode == "Reach")
+        {
+            GameOver("Won");
+        }
+    }
+
+    public void CheckAllBricksDestroyed(GameObject _recentBrick)
+    {
+        GameObject[] bricks = GameObject.FindGameObjectsWithTag("Brick");
+        if(bricks.Length == 0)
+        {
+            GameOver("Won");
+        }
+        else if(bricks.Length == 1 && bricks[0] == _recentBrick)
+        {
+            GameOver("Won");
+        }
     }
 
     //Ball hit bottom wall

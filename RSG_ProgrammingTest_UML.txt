@@ -2,6 +2,7 @@
 starts, runs, and ends game
 updates UI
 GameState gameState;
+string gameMode;
 int playerScore
 int currentLives;
 int maxLives;
@@ -11,6 +12,7 @@ int brickDepth
 GameObject ballPrefab
 Vector3 ballSpawnPos
 GameObject ballObject
+GameObject gameModeCanvas;
 GameObject pauseCanvas
 GameObject gameOverCanvas
 Text scoreText
@@ -18,10 +20,12 @@ Text livesText
 Start()
 Update()
 GenerateBricks()
+SetGameMode()
 StartGame()
 UpdateUI()
 UpdateScore(int scoreToAdd)
 HitTopWall()
+CheckAllBricksDestroyed(GameObject recentBrick)
 BallLost()
 GameOver(string gOCondition)
 TogglePauseGame()
@@ -42,6 +46,7 @@ OnCollisionEnter(collision whatIHit)
 Manages brick interactions
 Colour colour
 int score
+GameObject uiNotification;
 Start()
 BrickHit()
 
@@ -51,3 +56,8 @@ float speed
 Update()
 
 >GameState
+
+>UIMover
+float speed
+float duration
+Update()
