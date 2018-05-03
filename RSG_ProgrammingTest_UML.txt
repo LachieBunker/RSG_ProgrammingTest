@@ -5,6 +5,9 @@ GameState gameState;
 int playerScore
 int currentLives;
 int maxLives;
+GameObject[] brickRowPrefabs
+int brickWidth
+int brickDepth
 GameObject ballPrefab
 Vector3 ballSpawnPos
 GameObject ballObject
@@ -14,6 +17,7 @@ Text scoreText
 Text livesText
 Start()
 Update()
+GenerateBricks()
 StartGame()
 UpdateUI()
 UpdateScore(int scoreToAdd)

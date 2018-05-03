@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour {
     private int playerScore;
     private int currentLives;
     private int maxLives = 3;
+    public GameObject[] brickRowPrefabs;
+    private int brickWidth = 10;
+    private int brickDepth = 8;
     public GameObject ballPrefab;
     public Vector3 ballSpawnPos;
     private GameObject ballObject;
@@ -28,6 +31,7 @@ public class GameManager : MonoBehaviour {
         gameState = GameState.Paused;
         currentLives = maxLives;
         playerScore = 0;
+        GenerateBricks();
         ballObject = (GameObject)Instantiate(ballPrefab, ballSpawnPos, Quaternion.identity);
         pauseCanvas.gameObject.SetActive(false);
         gameOverCanvas.gameObject.SetActive(false);
@@ -43,6 +47,17 @@ public class GameManager : MonoBehaviour {
             TogglePauseGame();
         }
 	}
+
+    private void GenerateBricks()
+    {
+        for(int x = 0; x < brickWidth; x++)
+        {
+            for(int y = 0; y < brickDepth; y++)
+            {
+                Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
+            }
+        }
+    }
 
     //Unpause the game and start
     private void StartGame()
