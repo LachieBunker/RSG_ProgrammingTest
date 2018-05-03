@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour {
     private int brickWidth = 10;
     private int brickDepth = 8;
     public GameObject ballPrefab;
+    public bool spawnSpecialBricks;
     public Vector3 ballSpawnPos;
     private GameObject ballObject;
     public GameObject gameModeCanvas;
@@ -57,9 +58,35 @@ public class GameManager : MonoBehaviour {
         {
             for(int y = 0; y < brickDepth; y++)
             {
-                Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
+                if(spawnSpecialBricks)
+                {
+                    float specialChance = Random.Range(0, 100);
+                    if(specialChance <= 4)
+                    {
+                        GameObject _brick = (GameObject)Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
+                        _brick.GetComponent<BrickClass>().MakeSpecial();
+                    }
+                    Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
+                }
+                else
+                {
+                    Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
+                }
+                
+
             }
         }
+    }
+
+    public void SpawnBall(bool loseLife = true)
+    {
+        if(loseLife)
+        {
+            currentLives--;
+            UpdateUI();
+        }
+        ballObject = (GameObject)Instantiate(ballPrefab, ballSpawnPos, Quaternion.identity);
+        ballObject.GetComponent<BallController>().SetProperties(new Vector3(-0.5f, 0.5f, 0), 0.25f);
     }
 
     //Set the game mode, either Reach the top, or Clear the screen
@@ -107,6 +134,19 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void CheckAllBallsLost(GameObject _recentBall)
+    {
+        GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
+        if (balls.Length == 0)
+        {
+            AllBallsLost();
+        }
+        else if (balls.Length == 1 && balls[0] == _recentBall)
+        {
+            AllBallsLost();
+        }
+    }
+
     public void CheckAllBricksDestroyed(GameObject _recentBrick)
     {
         GameObject[] bricks = GameObject.FindGameObjectsWithTag("Brick");
@@ -121,18 +161,15 @@ public class GameManager : MonoBehaviour {
     }
 
     //Ball hit bottom wall
-    public void BallLost()
+    public void AllBallsLost()
     {
-        currentLives--;
-        UpdateUI();
-        if(currentLives <= 0)
+        if(currentLives > 0)
         {
-            GameOver("Lost");
+            SpawnBall();
         }
         else
         {
-            ballObject = (GameObject)Instantiate(ballPrefab, ballSpawnPos, Quaternion.identity);
-            ballObject.GetComponent<BallController>().SetProperties(new Vector3(-0.5f, 0.5f, 0), 0.25f);
+            GameOver("Lost");
         }
     }
 

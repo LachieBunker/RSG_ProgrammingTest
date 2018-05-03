@@ -894,6 +894,7 @@ MonoBehaviour:
   - {fileID: 1143875124702874, guid: a332c731570d9a34b8e79a5f19014aac, type: 2}
   - {fileID: 1143875124702874, guid: a332c731570d9a34b8e79a5f19014aac, type: 2}
   ballPrefab: {fileID: 1853324084913234, guid: 85d289665bb75c04eba900dde46ce6c8, type: 2}
+  spawnSpecialBricks: 1
   ballSpawnPos: {x: 0, y: -6, z: 0}
   gameModeCanvas: {fileID: 2143785233}
   pauseCanvas: {fileID: 451009128}

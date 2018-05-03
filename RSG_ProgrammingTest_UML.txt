@@ -10,6 +10,7 @@ GameObject[] brickRowPrefabs
 int brickWidth
 int brickDepth
 GameObject ballPrefab
+bool spawnSpecialBricks
 Vector3 ballSpawnPos
 GameObject ballObject
 GameObject gameModeCanvas;
@@ -20,13 +21,15 @@ Text livesText
 Start()
 Update()
 GenerateBricks()
+SpawnBall(bool loseLife = true)
 SetGameMode()
 StartGame()
 UpdateUI()
 UpdateScore(int scoreToAdd)
 HitTopWall()
+CheckAllBallsDestroyed(GameObject recentBall)
 CheckAllBricksDestroyed(GameObject recentBrick)
-BallLost()
+AllBallsLost()
 GameOver(string gOCondition)
 TogglePauseGame()
 Restart()
@@ -46,8 +49,10 @@ OnCollisionEnter(collision whatIHit)
 Manages brick interactions
 Colour colour
 int score
+bool special
 GameObject uiNotification;
 Start()
+MakeSpecial()
 BrickHit()
 
 >PaddleController

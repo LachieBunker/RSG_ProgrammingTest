@@ -100,7 +100,7 @@ public class BallController : MonoBehaviour {
                 }
                 break;
             case "BottomWall":
-                gameManager.BallLost();
+                gameManager.CheckAllBallsLost(gameObject);
                 Destroy(gameObject);
                 break;
             default:

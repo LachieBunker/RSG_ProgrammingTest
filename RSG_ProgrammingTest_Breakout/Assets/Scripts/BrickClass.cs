@@ -7,6 +7,7 @@ public class BrickClass : MonoBehaviour {
 
     public Color colour;
     public int score;
+    private bool special;
     public GameObject uiNotification;
 
     private void Start()
@@ -14,11 +15,22 @@ public class BrickClass : MonoBehaviour {
         gameObject.GetComponent<MeshRenderer>().material.color = colour;
     }
 
+    //Make brick special, so it adds a ball when hit
+    public void MakeSpecial()
+    {
+        special = true;
+        colour = new Color(200, 0, 255);
+    }
+
     //Brick was hit by ball
     public void BrickHit()
     {
         GameManager gManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
         gManager.UpdateScore(score);
+        if(special)
+        {
+            gManager.SpawnBall(false);
+        }
         if(gManager.gameMode == "Clear")
         {
             gManager.CheckAllBricksDestroyed(gameObject);
