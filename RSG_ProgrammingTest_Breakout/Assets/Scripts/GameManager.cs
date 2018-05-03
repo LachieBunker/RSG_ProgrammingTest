@@ -16,9 +16,10 @@ public class GameManager : MonoBehaviour {
     private int brickWidth = 10;
     private int brickDepth = 8;
     public GameObject ballPrefab;
-    public bool spawnSpecialBricks;
     public Vector3 ballSpawnPos;
     private GameObject ballObject;
+    public Slider specialBrickSpawnChanceSlider;
+    public Text specialBrickSpawnChanceText;
     public GameObject gameModeCanvas;
     public GameObject pauseCanvas;
     public GameObject gameOverCanvas;
@@ -34,8 +35,6 @@ public class GameManager : MonoBehaviour {
         gameState = GameState.Paused;
         currentLives = maxLives;
         playerScore = 0;
-        GenerateBricks();
-        ballObject = (GameObject)Instantiate(ballPrefab, ballSpawnPos, Quaternion.identity);
         pauseCanvas.gameObject.SetActive(false);
         gameOverCanvas.gameObject.SetActive(false);
         gameModeCanvas.gameObject.SetActive(true);
@@ -58,22 +57,16 @@ public class GameManager : MonoBehaviour {
         {
             for(int y = 0; y < brickDepth; y++)
             {
-                if(spawnSpecialBricks)
+                float specialChance = Random.Range(1, 100);
+                if (specialChance <= specialBrickSpawnChanceSlider.value)
                 {
-                    float specialChance = Random.Range(0, 100);
-                    if(specialChance <= 4)
-                    {
-                        GameObject _brick = (GameObject)Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
-                        _brick.GetComponent<BrickClass>().MakeSpecial();
-                    }
-                    Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
+                    GameObject _brick = (GameObject)Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
+                    _brick.GetComponent<BrickClass>().MakeSpecial();
                 }
                 else
                 {
                     Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
                 }
-                
-
             }
         }
     }
@@ -101,6 +94,8 @@ public class GameManager : MonoBehaviour {
             gameMode = "Reach";
         }
         gameModeCanvas.gameObject.SetActive(false);
+        GenerateBricks();
+        ballObject = (GameObject)Instantiate(ballPrefab, ballSpawnPos, Quaternion.identity);
         StartGame();
     }
 
@@ -117,6 +112,11 @@ public class GameManager : MonoBehaviour {
     {
         scoreText.text = "Score: " + playerScore.ToString();
         livesText.text = "Lives: " + currentLives.ToString();
+    }
+
+    public void UpdateSpawnChanceText()
+    {
+        specialBrickSpawnChanceText.text = "Chance to spawn special bricks: " + specialBrickSpawnChanceSlider.value.ToString("F0");
     }
 
     //Increase playerScore

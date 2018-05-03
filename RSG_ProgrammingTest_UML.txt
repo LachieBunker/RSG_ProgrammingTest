@@ -10,9 +10,10 @@ GameObject[] brickRowPrefabs
 int brickWidth
 int brickDepth
 GameObject ballPrefab
-bool spawnSpecialBricks
 Vector3 ballSpawnPos
 GameObject ballObject
+Slider specialBrickSpawnChanceSlider
+Text specialBrickSpawnChanceText
 GameObject gameModeCanvas;
 GameObject pauseCanvas
 GameObject gameOverCanvas
