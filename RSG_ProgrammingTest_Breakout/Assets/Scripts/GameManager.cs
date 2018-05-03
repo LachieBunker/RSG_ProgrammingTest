@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class GameManager : MonoBehaviour {
 
@@ -53,24 +54,80 @@ public class GameManager : MonoBehaviour {
     //Generate bricks, with the colour of the bricks based on brickRowPrefabs
     private void GenerateBricks()
     {
-        for(int x = 0; x < brickWidth; x++)
+        int[] columns = GetBrickLayout();
+        //Get brick layout
+        for(int x = 0; x < columns.Length; x++)
         {
-            for(int y = 0; y < brickDepth; y++)
+            //Max of 10 columns
+            if(x < 10)
             {
-                float specialChance = Random.Range(1, 100);
-                if (specialChance <= specialBrickSpawnChanceSlider.value)
+                for (int y = 0; y < columns[x]; y++)
                 {
-                    GameObject _brick = (GameObject)Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
-                    _brick.GetComponent<BrickClass>().MakeSpecial();
-                }
-                else
-                {
-                    Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
+                    //Max of 8 rows
+                    if(y < 8)
+                    {
+                        //Chance to spawn special brick instead
+                        float specialChance = Random.Range(1, 100);
+                        if (specialChance <= specialBrickSpawnChanceSlider.value)
+                        {
+                            GameObject _brick = (GameObject)Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
+                            _brick.GetComponent<BrickClass>().MakeSpecial();
+                        }
+                        else
+                        {
+                            Instantiate(brickRowPrefabs[y], new Vector3((-13.5f + (x * 3)), (8.5f - y), 0), Quaternion.identity);
+                        }
+                    }
+    
+                    
                 }
             }
+            
         }
     }
 
+    //Generate the brick layout for the level
+    public int[] GetBrickLayout()
+    {
+        //Set default layout
+        int[] layout = new int[10] { 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 };
+        string path = "BrickLayouts/bricklayout.txt";
+        //Check if file exists at path
+        if(File.Exists(path))
+        {
+            StreamReader reader = new StreamReader(path);
+            string layoutText = reader.ReadLine();
+            Debug.Log("Imported text: " + layoutText);
+            if (layoutText != "")
+            {
+                char[] layoutChars = layoutText.ToCharArray();
+                for (int i = 0; i < layoutChars.Length; i++)
+                {
+                    //Only import up to 10 characters
+                    if(i < 10)
+                    {
+                        int num;
+                        //Check that the character is a number
+                        if (int.TryParse(layoutChars[i].ToString(), out num))
+                        {
+                            //Set the column depth to the new number
+                            layout[i] = num;
+                        }
+                    }
+                    
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("File doesn't exist");
+        }
+        
+        //Return brick layout
+        return layout;
+    }
+
+    //Spawn a new ball, and if loseLife is true, remove a life as well
     public void SpawnBall(bool loseLife = true)
     {
         if(loseLife)
